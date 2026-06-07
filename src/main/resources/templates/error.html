@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Hotel Management</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<main class="main container">
+    <section class="error-section">
+        <h1>Something went wrong</h1>
+        <p th:text="${errorMessage}">An error occurred.</p>
+        <a th:href="@{/}" class="btn btn-primary">Go Home</a>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} ?: 'Hotel Management System'">Hotel Management System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="header">
+    <div class="container header-content">
+        <h1 class="logo">Hotel Management</h1>
+        <nav class="nav" sec:authorize="isAuthenticated()">
+            <span class="nav-user" sec:authentication="name">User</span>
+            <form th:action="@{/logout}" method="post" class="logout-form">
+                <button type="submit" class="btn btn-secondary">Logout</button>
+            </form>
+        </nav>
+    </div>
+</header>
+
+<main class="main container">
+    <div th:replace="~{::content}">Content</div>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2026 Hotel Management System</p>
+    </div>
+</footer>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

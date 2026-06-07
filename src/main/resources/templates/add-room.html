@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Add Room</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+
+<main class="main container">
+    <div class="page-header">
+        <div>
+            <h2>Add Room</h2>
+            <p class="page-subtitle">Create a new hotel room</p>
+        </div>
+        <a th:href="@{/rooms}" class="btn btn-outline">Back to Rooms</a>
+    </div>
+
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <section class="card form-card">
+        <form th:action="@{/rooms/add}" th:object="${room}" method="post" class="room-form">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="roomNumber">Room Number <span class="required">*</span></label>
+                    <input type="text" id="roomNumber" th:field="*{roomNumber}" required maxlength="10">
+                    <span class="field-error" th:if="${#fields.hasErrors('roomNumber')}"
+                          th:errors="*{roomNumber}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="roomType">Room Type <span class="required">*</span></label>
+                    <select id="roomType" th:field="*{roomType}" required>
+                        <option value="">Select type</option>
+                        <option th:each="type : ${roomTypes}"
+                                th:value="${type.name()}"
+                                th:text="${type.displayName}"></option>
+                    </select>
+                    <span class="field-error" th:if="${#fields.hasErrors('roomType')}"
+                          th:errors="*{roomType}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="pricePerNight">Price (per night) <span class="required">*</span></label>
+                    <input type="number" id="pricePerNight" th:field="*{pricePerNight}"
+                           step="0.01" min="0.01" required>
+                    <span class="field-error" th:if="${#fields.hasErrors('pricePerNight')}"
+                          th:errors="*{pricePerNight}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Status <span class="required">*</span></label>
+                    <select id="status" th:field="*{status}" required>
+                        <option th:each="s : ${roomStatuses}"
+                                th:value="${s.name()}"
+                                th:text="${s.name()}"></option>
+                    </select>
+                    <span class="field-error" th:if="${#fields.hasErrors('status')}"
+                          th:errors="*{status}"></span>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Room</button>
+                <a th:href="@{/rooms}" class="btn btn-outline">Cancel</a>
+            </div>
+        </form>
+    </section>
+</main>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

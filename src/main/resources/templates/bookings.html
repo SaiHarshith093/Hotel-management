@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Booking Management</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+
+<main class="main container">
+    <div class="page-header">
+        <div>
+            <h2>Booking Management</h2>
+            <p class="page-subtitle">View, search, and manage room bookings</p>
+        </div>
+        <a th:href="@{/bookings/add}" class="btn btn-primary">Create Booking</a>
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <section class="card">
+        <form th:action="@{/bookings}" method="get" class="filter-form">
+            <div class="filter-grid">
+                <div class="form-group">
+                    <label for="search">Search</label>
+                    <input type="text" id="search" name="search" th:value="${search}"
+                           placeholder="Booking ID, customer, or room...">
+                </div>
+                <div class="form-group">
+                    <label for="status">Booking Status</label>
+                    <select id="status" name="status">
+                        <option value="">All Statuses</option>
+                        <option th:each="s : ${bookingStatuses}"
+                                th:value="${s.name()}"
+                                th:text="${s.name()}"
+                                th:selected="${selectedStatus == s}"></option>
+                    </select>
+                </div>
+                <div class="form-group filter-actions">
+                    <label>&nbsp;</label>
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                        <a th:href="@{/bookings}" class="btn btn-outline">Clear</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <section class="card table-card">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Customer</th>
+                    <th>Room</th>
+                    <th>Check-In</th>
+                    <th>Check-Out</th>
+                    <th>Status</th>
+                    <th class="actions-col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(bookings)}">
+                    <td colspan="7" class="empty-row">No bookings found.</td>
+                </tr>
+                <tr th:each="booking : ${bookings}">
+                    <td th:text="${booking.id}">1</td>
+                    <td th:text="${booking.customerName}">John Doe</td>
+                    <td th:text="${booking.roomNumber}">101</td>
+                    <td th:text="${#temporals.format(booking.checkInDate, 'dd MMM yyyy')}">01 Jun 2026</td>
+                    <td th:text="${#temporals.format(booking.checkOutDate, 'dd MMM yyyy')}">05 Jun 2026</td>
+                    <td>
+                        <span class="badge"
+                              th:classappend="${' badge-booking-' + #strings.toLowerCase(booking.status.name())}"
+                              th:text="${booking.status.name()}">CONFIRMED</span>
+                    </td>
+                    <td class="actions-col">
+                        <form th:if="${booking.cancellable}"
+                              th:action="@{/bookings/cancel/{id}(id=${booking.id})}" method="post"
+                              class="inline-form"
+                              onsubmit="return confirm('Cancel this booking?');">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+                        </form>
+                        <span th:unless="${booking.cancellable}" class="text-muted">—</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

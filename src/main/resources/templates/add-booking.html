@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Create Booking</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+
+<main class="main container">
+    <div class="page-header">
+        <div>
+            <h2>Create Booking</h2>
+            <p class="page-subtitle">Book an available room for a customer</p>
+        </div>
+        <a th:href="@{/bookings}" class="btn btn-outline">Back to Bookings</a>
+    </div>
+
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <section class="card form-card">
+        <form th:action="@{/bookings/add}" th:object="${booking}" method="post" class="room-form">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="customerId">Customer <span class="required">*</span></label>
+                    <select id="customerId" th:field="*{customerId}" required>
+                        <option value="">Select customer</option>
+                        <option th:each="customer : ${customers}"
+                                th:value="${customer.id}"
+                                th:text="${customer.name + ' (' + customer.phone + ')'}"></option>
+                    </select>
+                    <span class="field-error" th:if="${#fields.hasErrors('customerId')}"
+                          th:errors="*{customerId}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="roomId">Room <span class="required">*</span></label>
+                    <select id="roomId" th:field="*{roomId}" required>
+                        <option value="">Select available room</option>
+                        <option th:each="room : ${availableRooms}"
+                                th:value="${room.id}"
+                                th:text="${room.roomNumber + ' - ' + room.roomType.displayName + ' (₹' + room.pricePerNight + '/night)'}"></option>
+                    </select>
+                    <span class="field-error" th:if="${#fields.hasErrors('roomId')}"
+                          th:errors="*{roomId}"></span>
+                    <p th:if="${#lists.isEmpty(availableRooms)}" class="field-hint">
+                        No available rooms. Please add or free up a room first.
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label for="checkInDate">Check-In Date <span class="required">*</span></label>
+                    <input type="date" id="checkInDate" th:field="*{checkInDate}" required>
+                    <span class="field-error" th:if="${#fields.hasErrors('checkInDate')}"
+                          th:errors="*{checkInDate}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="checkOutDate">Check-Out Date <span class="required">*</span></label>
+                    <input type="date" id="checkOutDate" th:field="*{checkOutDate}" required>
+                    <span class="field-error" th:if="${#fields.hasErrors('checkOutDate')}"
+                          th:errors="*{checkOutDate}"></span>
+                    <span class="field-error" th:if="${#fields.hasErrors('validDateRange')}"
+                          th:errors="*{validDateRange}"></span>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary"
+                        th:disabled="${#lists.isEmpty(availableRooms)}">Create Booking</button>
+                <a th:href="@{/bookings}" class="btn btn-outline">Cancel</a>
+            </div>
+        </form>
+    </section>
+</main>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
