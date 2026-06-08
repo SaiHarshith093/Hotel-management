@@ -1,27 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${pageTitle}">Login - Hotel Management</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-</head>
+<head th:replace="~{fragments/layout :: head(${pageTitle})}"></head>
 <body class="auth-body">
 <div class="auth-container">
     <div class="auth-card">
+        <span class="auth-brand-icon" aria-hidden="true">&#9733;</span>
         <h1>Hotel Management</h1>
         <p class="auth-subtitle">Sign in to your account</p>
 
-        <div th:if="${loginError}" class="alert alert-error">
+        <div th:if="${loginError}" class="alert alert-error" data-error-message>
             Invalid username or password.
         </div>
-        <div th:if="${logoutSuccess}" class="alert alert-success">
+        <div th:if="${logoutSuccess}" class="alert alert-success" data-success-message>
             You have been logged out successfully.
         </div>
-        <div th:if="${sessionExpired}" class="alert alert-error">
+        <div th:if="${sessionExpired}" class="alert alert-error" data-error-message>
             Your session has expired. Please sign in again.
         </div>
-        <div th:if="${accessDenied}" class="alert alert-error">
+        <div th:if="${accessDenied}" class="alert alert-error" data-error-message>
             You do not have permission to perform that action.
         </div>
 
@@ -30,16 +26,19 @@
 
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" required autofocus autocomplete="username">
+                <input type="text" id="username" name="username" required autofocus autocomplete="username"
+                       placeholder="Enter your username">
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required autocomplete="current-password">
+                <input type="password" id="password" name="password" required autocomplete="current-password"
+                       placeholder="Enter your password">
             </div>
             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
         </form>
     </div>
 </div>
-<script th:src="@{/js/main.js}"></script>
+<div th:replace="~{fragments/layout :: modals}"></div>
+<div th:replace="~{fragments/layout :: scripts}"></div>
 </body>
 </html>

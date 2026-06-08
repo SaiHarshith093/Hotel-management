@@ -1,18 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page Not Found - Hotel Management</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-</head>
-<body>
-<div th:replace="~{fragments/layout :: header}"></div>
-
-<main class="main container">
-    <div th:replace="~{fragments/error-page :: content('404')}"></div>
-</main>
-
-<div th:replace="~{fragments/layout :: footer}"></div>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Page Not Found')}"></head>
+<body class="app-body">
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+<div class="app-wrapper">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <main class="main-content">
+        <div th:replace="~{fragments/error-page :: content('404')}"></div>
+    </main>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<div th:replace="~{fragments/layout :: modals}"></div>
+<div th:replace="~{fragments/layout :: scripts}"></div>
 </body>
 </html>

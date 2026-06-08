@@ -1,0 +1,148 @@
+/* Dashboard KPI cards and charts */
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.375rem 1.5rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.kpi-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--primary);
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.kpi-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.kpi-value {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1.2;
+}
+
+.kpi-icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    opacity: 0.15;
+}
+
+.kpi-available::before {
+    background: var(--success);
+}
+
+.kpi-available .kpi-value {
+    color: var(--success);
+}
+
+.kpi-occupied::before {
+    background: var(--error);
+}
+
+.kpi-occupied .kpi-value {
+    color: var(--error);
+}
+
+.kpi-bookings::before {
+    background: var(--primary-light);
+}
+
+.kpi-bookings .kpi-value {
+    color: var(--primary-light);
+}
+
+.kpi-revenue::before {
+    background: var(--accent);
+}
+
+.kpi-revenue .kpi-value {
+    color: var(--warning);
+}
+
+.chart-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.chart-card {
+    margin-bottom: 0;
+}
+
+.chart-card-wide {
+    grid-column: 1 / -1;
+}
+
+.chart-container {
+    position: relative;
+    height: 260px;
+}
+
+.chart-container-wide {
+    height: 300px;
+}
+
+.quick-links-card {
+    margin-bottom: 0;
+}
+
+.quick-links-card .dashboard-links {
+    margin-top: 0;
+}
+
+@media (max-width: 768px) {
+    .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .kpi-value {
+        font-size: 1.5rem;
+    }
+
+    .chart-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-card-wide {
+        grid-column: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+}

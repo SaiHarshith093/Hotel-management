@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${pageTitle}">Add Room</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-</head>
-<body>
-<div th:replace="~{fragments/layout :: header}"></div>
-
-<main class="main container">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head(${pageTitle})}"></head>
+<body class="app-body">
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+<div class="app-wrapper">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <main class="main-content">
     <div class="page-header">
         <div>
             <h2>Add Room</h2>
@@ -18,7 +15,7 @@
         <a th:href="@{/rooms}" class="btn btn-outline">Back to Rooms</a>
     </div>
 
-    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-error" data-error-message th:text="${errorMessage}"></div>
 
     <section class="card form-card">
         <form th:action="@{/rooms/add}" th:object="${room}" method="post" class="room-form">
@@ -70,9 +67,10 @@
             </div>
         </form>
     </section>
-</main>
-
-<div th:replace="~{fragments/layout :: footer}"></div>
-<script th:src="@{/js/main.js}"></script>
+    </main>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<div th:replace="~{fragments/layout :: modals}"></div>
+<div th:replace="~{fragments/layout :: scripts}"></div>
 </body>
 </html>

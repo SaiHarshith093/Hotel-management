@@ -2,73 +2,71 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${pageTitle}">Customer Details</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-</head>
-<body>
-<div th:replace="~{fragments/layout :: header}"></div>
-
-<main class="main container">
-    <div class="page-header">
-        <div>
-            <h2>Customer Details</h2>
-            <p class="page-subtitle">View customer information</p>
+<head th:replace="~{fragments/layout :: head(${pageTitle})}"></head>
+<body class="app-body">
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+<div class="app-wrapper">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <h2>Customer Details</h2>
+                <p class="page-subtitle">View customer information</p>
+            </div>
+            <div class="btn-group">
+                <a th:href="@{/customers/edit/{id}(id=${customer.id})}" class="btn btn-primary">Edit</a>
+                <a th:href="@{/customers}" class="btn btn-outline">Back to List</a>
+            </div>
         </div>
-        <div class="btn-group">
-            <a th:href="@{/customers/edit/{id}(id=${customer.id})}" class="btn btn-primary">Edit</a>
-            <a th:href="@{/customers}" class="btn btn-outline">Back to List</a>
-        </div>
-    </div>
 
-    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
-    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+        <div th:if="${successMessage}" class="alert alert-success" data-success-message th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-error" data-error-message th:text="${errorMessage}"></div>
 
-    <section class="card detail-card">
-        <dl class="detail-list">
-            <div class="detail-item">
-                <dt>Customer ID</dt>
-                <dd th:text="${customer.id}">1</dd>
-            </div>
-            <div class="detail-item">
-                <dt>Name</dt>
-                <dd th:text="${customer.name}">John Doe</dd>
-            </div>
-            <div class="detail-item">
-                <dt>Phone</dt>
-                <dd th:text="${customer.phone}">+91-9876543210</dd>
-            </div>
-            <div class="detail-item">
-                <dt>Gender</dt>
-                <dd th:text="${customer.gender}">MALE</dd>
-            </div>
-            <div class="detail-item">
-                <dt>Email</dt>
-                <dd th:text="${customer.email ?: '-'}">email@example.com</dd>
-            </div>
-            <div class="detail-item">
-                <dt>Address</dt>
-                <dd th:text="${customer.address ?: '-'}">Address line</dd>
-            </div>
-            <div class="detail-item" th:if="${customer.createdAt != null}">
-                <dt>Registered On</dt>
-                <dd th:text="${#temporals.format(customer.createdAt, 'dd MMM yyyy HH:mm')}">01 Jan 2026</dd>
-            </div>
-        </dl>
+        <section class="card detail-card">
+            <dl class="detail-list">
+                <div class="detail-item">
+                    <dt>Customer ID</dt>
+                    <dd th:text="${customer.id}">1</dd>
+                </div>
+                <div class="detail-item">
+                    <dt>Name</dt>
+                    <dd th:text="${customer.name}">John Doe</dd>
+                </div>
+                <div class="detail-item">
+                    <dt>Phone</dt>
+                    <dd th:text="${customer.phone}">+91-9876543210</dd>
+                </div>
+                <div class="detail-item">
+                    <dt>Gender</dt>
+                    <dd th:text="${customer.gender}">MALE</dd>
+                </div>
+                <div class="detail-item">
+                    <dt>Email</dt>
+                    <dd th:text="${customer.email ?: '-'}">email@example.com</dd>
+                </div>
+                <div class="detail-item">
+                    <dt>Address</dt>
+                    <dd th:text="${customer.address ?: '-'}">Address line</dd>
+                </div>
+                <div class="detail-item" th:if="${customer.createdAt != null}">
+                    <dt>Registered On</dt>
+                    <dd th:text="${#temporals.format(customer.createdAt, 'dd MMM yyyy HH:mm')}">01 Jan 2026</dd>
+                </div>
+            </dl>
 
-        <div class="form-actions" sec:authorize="hasRole('ADMIN')">
-            <form th:action="@{/customers/delete/{id}(id=${customer.id})}" method="post"
-                  onsubmit="return confirm('Delete this customer?');">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                <button type="submit" class="btn btn-danger">Delete Customer</button>
-            </form>
-        </div>
-    </section>
-</main>
-
-<div th:replace="~{fragments/layout :: footer}"></div>
-<script th:src="@{/js/main.js}"></script>
+            <div class="form-actions" sec:authorize="hasRole('ADMIN')">
+                <form th:action="@{/customers/delete/{id}(id=${customer.id})}" method="post"
+                      data-confirm-delete
+                      data-confirm-message="Delete this customer?">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="btn btn-danger">Delete Customer</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<div th:replace="~{fragments/layout :: modals}"></div>
+<div th:replace="~{fragments/layout :: scripts}"></div>
 </body>
 </html>

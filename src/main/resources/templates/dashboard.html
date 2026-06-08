@@ -2,89 +2,87 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${pageTitle}">Dashboard</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-</head>
-<body>
-<div th:replace="~{fragments/layout :: header}"></div>
-
-<main class="main container">
-    <div class="page-header">
-        <div>
-            <h2>Dashboard</h2>
-            <p class="page-subtitle">Hotel overview and key metrics</p>
+<head th:replace="~{fragments/layout :: head(${pageTitle})}"></head>
+<body class="app-body">
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+<div class="app-wrapper">
+    <header th:replace="~{fragments/layout :: topbar}"></header>
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <h2>Dashboard</h2>
+                <p class="page-subtitle">Hotel overview and key metrics</p>
+            </div>
         </div>
-    </div>
 
-    <section class="kpi-grid">
-        <article class="kpi-card">
-            <span class="kpi-label">Total Rooms</span>
-            <span class="kpi-value" th:text="${stats.totalRooms}">0</span>
-        </article>
-        <article class="kpi-card kpi-available">
-            <span class="kpi-label">Available Rooms</span>
-            <span class="kpi-value" th:text="${stats.availableRooms}">0</span>
-        </article>
-        <article class="kpi-card kpi-occupied">
-            <span class="kpi-label">Occupied Rooms</span>
-            <span class="kpi-value" th:text="${stats.occupiedRooms}">0</span>
-        </article>
-        <article class="kpi-card">
-            <span class="kpi-label">Total Customers</span>
-            <span class="kpi-value" th:text="${stats.totalCustomers}">0</span>
-        </article>
-        <article class="kpi-card kpi-bookings">
-            <span class="kpi-label">Active Bookings</span>
-            <span class="kpi-value" th:text="${stats.activeBookings}">0</span>
-        </article>
-        <article class="kpi-card kpi-revenue">
-            <span class="kpi-label">Revenue Today</span>
-            <span class="kpi-value"
-                  th:text="'₹' + ${#numbers.formatDecimal(stats.revenueToday, 1, 2)}">₹0.00</span>
-        </article>
-    </section>
+        <section class="kpi-grid">
+            <article class="kpi-card">
+                <span class="kpi-icon" aria-hidden="true">&#127968;</span>
+                <span class="kpi-label">Total Rooms</span>
+                <span class="kpi-value" th:text="${stats.totalRooms}">0</span>
+            </article>
+            <article class="kpi-card kpi-available">
+                <span class="kpi-icon" aria-hidden="true">&#10003;</span>
+                <span class="kpi-label">Available Rooms</span>
+                <span class="kpi-value" th:text="${stats.availableRooms}">0</span>
+            </article>
+            <article class="kpi-card kpi-occupied">
+                <span class="kpi-icon" aria-hidden="true">&#128719;</span>
+                <span class="kpi-label">Occupied Rooms</span>
+                <span class="kpi-value" th:text="${stats.occupiedRooms}">0</span>
+            </article>
+            <article class="kpi-card kpi-bookings">
+                <span class="kpi-icon" aria-hidden="true">&#128197;</span>
+                <span class="kpi-label">Active Bookings</span>
+                <span class="kpi-value" th:text="${stats.activeBookings}">0</span>
+            </article>
+            <article class="kpi-card kpi-revenue">
+                <span class="kpi-icon" aria-hidden="true">&#8377;</span>
+                <span class="kpi-label">Revenue Today</span>
+                <span class="kpi-value"
+                      th:text="'₹' + ${#numbers.formatDecimal(stats.revenueToday, 1, 2)}">₹0.00</span>
+            </article>
+        </section>
 
-    <section class="chart-grid">
-        <article class="card chart-card">
-            <h3 class="card-title">Room Status</h3>
-            <div class="chart-container">
-                <canvas id="roomStatusChart"></canvas>
+        <section class="chart-grid">
+            <article class="card chart-card">
+                <h3 class="card-title">Room Status</h3>
+                <div class="chart-container">
+                    <canvas id="roomStatusChart"></canvas>
+                </div>
+            </article>
+            <article class="card chart-card">
+                <h3 class="card-title">Booking Status</h3>
+                <div class="chart-container">
+                    <canvas id="bookingStatusChart"></canvas>
+                </div>
+            </article>
+            <article class="card chart-card chart-card-wide">
+                <h3 class="card-title">Revenue — Last 7 Days</h3>
+                <div class="chart-container chart-container-wide">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </article>
+        </section>
+
+        <section class="card quick-links-card">
+            <h3 class="card-title">Quick Links</h3>
+            <div class="dashboard-links">
+                <a th:href="@{/rooms}" class="dashboard-link">Rooms</a>
+                <a th:href="@{/customers}" class="dashboard-link">Customers</a>
+                <a th:href="@{/bookings}" class="dashboard-link">Bookings</a>
+                <a th:href="@{/food-orders}" class="dashboard-link">Food Orders</a>
+                <a th:href="@{/bills}" class="dashboard-link">Billing</a>
+                <a th:href="@{/checkout}" class="dashboard-link">Checkout</a>
+                <a th:href="@{/reports}" class="dashboard-link">Reports</a>
             </div>
-        </article>
-        <article class="card chart-card">
-            <h3 class="card-title">Booking Status</h3>
-            <div class="chart-container">
-                <canvas id="bookingStatusChart"></canvas>
-            </div>
-        </article>
-        <article class="card chart-card chart-card-wide">
-            <h3 class="card-title">Revenue — Last 7 Days</h3>
-            <div class="chart-container chart-container-wide">
-                <canvas id="revenueChart"></canvas>
-            </div>
-        </article>
-    </section>
-
-    <section class="card quick-links-card">
-        <h3 class="card-title">Quick Links</h3>
-        <div class="dashboard-links">
-            <a th:href="@{/rooms}" class="dashboard-link">Rooms</a>
-            <a th:href="@{/customers}" class="dashboard-link">Customers</a>
-            <a th:href="@{/bookings}" class="dashboard-link">Bookings</a>
-            <a th:href="@{/food-orders}" class="dashboard-link">Food Orders</a>
-            <a th:href="@{/bills}" class="dashboard-link">Billing</a>
-            <a th:href="@{/checkout}" class="dashboard-link">Checkout</a>
-            <a th:href="@{/reports}" class="dashboard-link">Reports</a>
-        </div>
-    </section>
-</main>
-
-<div th:replace="~{fragments/layout :: footer}"></div>
-
+        </section>
+    </main>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+<div th:replace="~{fragments/layout :: modals}"></div>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script th:inline="javascript">
     const roomLabels = /*[[${roomChart.labels}]]*/ [];
     const roomValues = /*[[${roomChart.values}]]*/ [];
@@ -159,6 +157,5 @@
         }
     });
 </script>
-<script th:src="@{/js/main.js}"></script>
 </body>
 </html>
