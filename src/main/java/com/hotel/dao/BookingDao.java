@@ -125,6 +125,31 @@ public class BookingDao {
         );
     }
 
+    public List<BookingView> findEligibleForBilling() {
+        return jdbcTemplate.query(
+                VIEW_SELECT + """
+                 WHERE b.status IN (?, ?)
+                   AND NOT EXISTS (SELECT 1 FROM bills bl WHERE bl.booking_id = b.id)
+                 ORDER BY b.check_in_date DESC
+                """,
+                BOOKING_VIEW_ROW_MAPPER,
+                BookingStatus.CHECKED_IN.name(),
+                BookingStatus.CHECKED_OUT.name()
+        );
+    }
+
+    public List<BookingView> findEligibleForCheckout() {
+        return jdbcTemplate.query(
+                VIEW_SELECT + """
+                 WHERE b.status = ?
+                   AND NOT EXISTS (SELECT 1 FROM bills bl WHERE bl.booking_id = b.id)
+                 ORDER BY b.check_in_date DESC
+                """,
+                BOOKING_VIEW_ROW_MAPPER,
+                BookingStatus.CHECKED_IN.name()
+        );
+    }
+
     public Optional<Booking> findById(Long id) {
         try {
             Booking booking = jdbcTemplate.queryForObject(
@@ -133,6 +158,19 @@ public class BookingDao {
                     id
             );
             return Optional.ofNullable(booking);
+        } catch (EmptyResultDataAccessException ex) {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<BookingView> findViewById(Long id) {
+        try {
+            BookingView view = jdbcTemplate.queryForObject(
+                    VIEW_SELECT + " WHERE b.id = ?",
+                    BOOKING_VIEW_ROW_MAPPER,
+                    id
+            );
+            return Optional.ofNullable(view);
         } catch (EmptyResultDataAccessException ex) {
             return Optional.empty();
         }

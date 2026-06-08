@@ -3,7 +3,10 @@ package com.hotel.service;
 import com.hotel.dao.BookingDao;
 import com.hotel.dao.CustomerDao;
 import com.hotel.dao.RoomDao;
+import com.hotel.exception.BookingNotFoundException;
+import com.hotel.exception.CustomerNotFoundException;
 import com.hotel.exception.HotelException;
+import com.hotel.exception.RoomNotAvailableException;
 import com.hotel.model.Booking;
 import com.hotel.model.BookingView;
 import com.hotel.model.Room;
@@ -34,7 +37,7 @@ public class BookingService {
 
     public Booking getBookingById(Long id) {
         return bookingDao.findById(id)
-                .orElseThrow(() -> new HotelException("Booking not found with id: " + id));
+                .orElseThrow(() -> new BookingNotFoundException(id));
     }
 
     @Transactional
@@ -43,13 +46,13 @@ public class BookingService {
         validateBookingDates(booking.getCheckInDate(), booking.getCheckOutDate());
 
         customerDao.findById(booking.getCustomerId())
-                .orElseThrow(() -> new HotelException("Customer not found with id: " + booking.getCustomerId()));
+                .orElseThrow(() -> new CustomerNotFoundException(booking.getCustomerId()));
 
         Room room = roomDao.findById(booking.getRoomId())
                 .orElseThrow(() -> new HotelException("Room not found with id: " + booking.getRoomId()));
 
         if (room.getStatus() != RoomStatus.AVAILABLE) {
-            throw new HotelException("Room " + room.getRoomNumber() + " is not available for booking.");
+            throw new RoomNotAvailableException(room.getRoomNumber());
         }
 
         validateRoomAvailability(booking.getRoomId(), booking.getCheckInDate(), booking.getCheckOutDate(), null);
@@ -71,7 +74,8 @@ public class BookingService {
         if (booking.getStatus() == BookingStatus.CANCELLED) {
             throw new HotelException("Booking is already cancelled.");
         }
-        if (booking.getStatus() == BookingStatus.CHECKED_OUT) {
+        if (booking.getStatus() == BookingStatus.CHECKED_OUT
+                || booking.getStatus() == BookingStatus.COMPLETED) {
             throw new HotelException("Cannot cancel a completed booking.");
         }
 
@@ -98,7 +102,7 @@ public class BookingService {
     private void validateRoomAvailability(Long roomId, LocalDate checkIn, LocalDate checkOut, Long excludeId) {
         int overlaps = bookingDao.countOverlappingActiveBookings(roomId, checkIn, checkOut, excludeId);
         if (overlaps > 0) {
-            throw new HotelException("Room is not available for the selected dates.");
+            throw RoomNotAvailableException.forDateConflict();
         }
     }
 

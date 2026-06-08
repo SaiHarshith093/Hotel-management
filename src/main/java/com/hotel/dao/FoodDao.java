@@ -229,4 +229,18 @@ public class FoodDao {
     public int deleteOrderById(Long id) {
         return jdbcTemplate.update("DELETE FROM food_orders WHERE id = ?", id);
     }
+
+    public BigDecimal sumTotalByBookingId(Long bookingId) {
+        BigDecimal total = jdbcTemplate.queryForObject(
+                """
+                        SELECT COALESCE(SUM(total_price), 0)
+                        FROM food_orders
+                        WHERE booking_id = ? AND order_status <> ?
+                        """,
+                BigDecimal.class,
+                bookingId,
+                FoodOrderStatus.CANCELLED.name()
+        );
+        return total != null ? total : BigDecimal.ZERO;
+    }
 }

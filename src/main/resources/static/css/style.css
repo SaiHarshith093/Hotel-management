@@ -237,6 +237,52 @@ body {
     color: var(--text-muted);
 }
 
+.error-page {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    max-width: 560px;
+    margin: 2rem auto;
+}
+
+.error-icon {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.error-code {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+}
+
+.error-page h1 {
+    color: var(--primary);
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.error-message {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.error-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
 .logo-link {
     color: inherit;
     text-decoration: none;
@@ -545,6 +591,11 @@ body {
     color: #475569;
 }
 
+.badge-booking-completed {
+    background: #d1fae5;
+    color: #065f46;
+}
+
 .badge-booking-cancelled {
     background: #fee2e2;
     color: #991b1b;
@@ -628,4 +679,224 @@ body {
 .amount-preview strong {
     font-size: 1.25rem;
     color: var(--primary);
+}
+
+.card-title {
+    font-size: 1.1rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.badge-payment-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.badge-payment-partial {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.badge-payment-paid {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge-payment-refunded {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.bill-receipt {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.bill-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border);
+}
+
+.bill-header h3 {
+    color: var(--primary);
+    font-size: 1.5rem;
+}
+
+.bill-subtitle {
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+.bill-meta {
+    display: grid;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.bill-meta-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.bill-label {
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.bill-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+}
+
+.bill-table th,
+.bill-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+.bill-table th.text-right,
+.bill-table td.text-right {
+    text-align: right;
+}
+
+.bill-total-row td {
+    border-top: 2px solid var(--primary);
+    border-bottom: none;
+    padding-top: 1rem;
+    font-size: 1.1rem;
+}
+
+.bill-notes {
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.bill-notes p {
+    margin-top: 0.25rem;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.checkout-note {
+    margin-bottom: 1rem;
+}
+
+.container-wide {
+    max-width: 1300px;
+}
+
+.report-filter-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.report-export-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.report-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.report-summary {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 1rem;
+}
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.kpi-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.kpi-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.kpi-available .kpi-value {
+    color: #16a34a;
+}
+
+.kpi-occupied .kpi-value {
+    color: #dc2626;
+}
+
+.kpi-bookings .kpi-value {
+    color: #2d5a8e;
+}
+
+.kpi-revenue .kpi-value {
+    color: #d97706;
+}
+
+.chart-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.chart-card-wide {
+    grid-column: 1 / -1;
+}
+
+.chart-container {
+    position: relative;
+    height: 260px;
+}
+
+.chart-container-wide {
+    height: 300px;
+}
+
+.quick-links-card {
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .chart-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-card-wide {
+        grid-column: auto;
+    }
 }

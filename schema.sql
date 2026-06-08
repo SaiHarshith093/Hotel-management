@@ -111,7 +111,7 @@ CREATE TABLE bookings (
     check_out_date  DATE            NOT NULL,
     adults          INT             NOT NULL DEFAULT 1,
     children        INT             NOT NULL DEFAULT 0,
-    status          ENUM('PENDING', 'CONFIRMED', 'CHECKED_IN', 'CHECKED_OUT', 'CANCELLED') NOT NULL DEFAULT 'PENDING',
+    status          ENUM('PENDING', 'CONFIRMED', 'CHECKED_IN', 'CHECKED_OUT', 'COMPLETED', 'CANCELLED') NOT NULL DEFAULT 'PENDING',
     special_requests TEXT           NULL,
     created_by      BIGINT          NULL,
     created_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,

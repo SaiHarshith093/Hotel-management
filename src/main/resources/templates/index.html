@@ -17,6 +17,8 @@
             <a th:href="@{/customers}" class="nav-link">Customers</a>
             <a th:href="@{/bookings}" class="nav-link">Bookings</a>
             <a th:href="@{/food-orders}" class="nav-link">Food Orders</a>
+            <a th:href="@{/bills}" class="nav-link">Billing</a>
+            <a th:href="@{/checkout}" class="nav-link">Checkout</a>
             <span class="nav-user">
                 <span sec:authentication="principal.fullName">User</span>
                 (<span sec:authentication="principal.user.role">ROLE</span>)
@@ -38,6 +40,8 @@
             <a th:href="@{/customers}" class="dashboard-link">Customer Management</a>
             <a th:href="@{/bookings}" class="dashboard-link">Booking Management</a>
             <a th:href="@{/food-orders}" class="dashboard-link">Food Orders</a>
+            <a th:href="@{/bills}" class="dashboard-link">Billing</a>
+            <a th:href="@{/checkout}" class="dashboard-link">Guest Checkout</a>
         </div>
     </section>
 </main>

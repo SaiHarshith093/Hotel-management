@@ -1,6 +1,7 @@
 package com.hotel.service;
 
 import com.hotel.dao.CustomerDao;
+import com.hotel.exception.CustomerNotFoundException;
 import com.hotel.exception.HotelException;
 import com.hotel.model.Customer;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -24,7 +25,7 @@ public class CustomerService {
 
     public Customer getCustomerById(Long id) {
         return customerDao.findById(id)
-                .orElseThrow(() -> new HotelException("Customer not found with id: " + id));
+                .orElseThrow(() -> new CustomerNotFoundException(id));
     }
 
     @Transactional
@@ -48,7 +49,7 @@ public class CustomerService {
         try {
             int deleted = customerDao.deleteById(id);
             if (deleted == 0) {
-                throw new HotelException("Customer not found with id: " + id);
+                throw new CustomerNotFoundException(id);
             }
         } catch (DataIntegrityViolationException ex) {
             throw new HotelException("Cannot delete customer. They may have active bookings.");

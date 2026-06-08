@@ -72,3 +72,18 @@ CREATE TABLE IF NOT EXISTS food_orders (
     ordered_at   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
     updated_at   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS bills (
+    id              BIGINT AUTO_INCREMENT PRIMARY KEY,
+    booking_id      BIGINT       NOT NULL UNIQUE,
+    room_charges    DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    food_charges    DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    tax_amount      DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    discount_amount DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    total_amount    DECIMAL(10,2) NOT NULL,
+    payment_status  VARCHAR(20)  NOT NULL DEFAULT 'PENDING',
+    payment_method  VARCHAR(20),
+    bill_date       TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    paid_at         TIMESTAMP,
+    notes           TEXT
+);

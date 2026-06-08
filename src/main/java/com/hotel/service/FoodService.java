@@ -2,6 +2,7 @@ package com.hotel.service;
 
 import com.hotel.dao.BookingDao;
 import com.hotel.dao.FoodDao;
+import com.hotel.exception.BookingNotFoundException;
 import com.hotel.exception.HotelException;
 import com.hotel.model.Booking;
 import com.hotel.model.BookingView;
@@ -53,7 +54,7 @@ public class FoodService {
     @Transactional
     public FoodOrder createOrder(FoodOrder order) {
         Booking booking = bookingDao.findById(order.getBookingId())
-                .orElseThrow(() -> new HotelException("Booking not found with id: " + order.getBookingId()));
+                .orElseThrow(() -> new BookingNotFoundException(order.getBookingId()));
 
         if (booking.getStatus() != BookingStatus.CONFIRMED
                 && booking.getStatus() != BookingStatus.CHECKED_IN) {

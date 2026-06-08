@@ -12,12 +12,16 @@
 
 <header class="header" th:fragment="header">
     <div class="container header-content">
-        <h1 class="logo"><a th:href="@{/}" class="logo-link">Hotel Management</a></h1>
+        <h1 class="logo"><a th:href="@{/dashboard}" class="logo-link">Hotel Management</a></h1>
         <nav class="nav" sec:authorize="isAuthenticated()">
+            <a th:href="@{/dashboard}" class="nav-link">Dashboard</a>
             <a th:href="@{/rooms}" class="nav-link">Rooms</a>
             <a th:href="@{/customers}" class="nav-link">Customers</a>
             <a th:href="@{/bookings}" class="nav-link">Bookings</a>
             <a th:href="@{/food-orders}" class="nav-link">Food Orders</a>
+            <a th:href="@{/bills}" class="nav-link">Billing</a>
+            <a th:href="@{/checkout}" class="nav-link">Checkout</a>
+            <a th:href="@{/reports}" class="nav-link">Reports</a>
             <span class="nav-user">
                 <span sec:authentication="principal.fullName">User</span>
                 (<span sec:authentication="principal.user.role">ROLE</span>)

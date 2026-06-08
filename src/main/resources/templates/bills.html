@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Billing</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+
+<main class="main container">
+    <div class="page-header">
+        <div>
+            <h2>Billing</h2>
+            <p class="page-subtitle">Generate, view, and manage guest bills</p>
+        </div>
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <section class="card" th:if="${!#lists.isEmpty(eligibleBookings)}">
+        <h3 class="card-title">Generate Bill</h3>
+        <form th:action="@{/bills/generate}" method="post" class="filter-form">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <div class="filter-grid">
+                <div class="form-group">
+                    <label for="bookingId">Booking</label>
+                    <select id="bookingId" name="bookingId" required>
+                        <option value="">Select a booking...</option>
+                        <option th:each="b : ${eligibleBookings}"
+                                th:value="${b.id}"
+                                th:text="'#' + ${b.id} + ' — ' + ${b.customerName} + ' (Room ' + ${b.roomNumber} + ')'">
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Notes (optional)</label>
+                    <input type="text" id="notes" name="notes" placeholder="e.g. Checkout bill">
+                </div>
+                <div class="form-group filter-actions">
+                    <label>&nbsp;</label>
+                    <button type="submit" class="btn btn-primary">Generate Bill</button>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <section class="card" th:if="${#lists.isEmpty(eligibleBookings)}">
+        <p class="text-muted">No bookings are eligible for billing. Bills can be generated for checked-in or checked-out bookings without an existing bill.</p>
+    </section>
+
+    <section class="card">
+        <form th:action="@{/bills}" method="get" class="filter-form">
+            <div class="filter-grid">
+                <div class="form-group">
+                    <label for="search">Search</label>
+                    <input type="text" id="search" name="search" th:value="${search}"
+                           placeholder="Bill ID, booking ID, customer, room...">
+                </div>
+                <div class="form-group">
+                    <label for="status">Payment Status</label>
+                    <select id="status" name="status">
+                        <option value="">All Statuses</option>
+                        <option th:each="s : ${paymentStatuses}"
+                                th:value="${s.name()}"
+                                th:text="${s.name()}"
+                                th:selected="${selectedStatus == s}"></option>
+                    </select>
+                </div>
+                <div class="form-group filter-actions">
+                    <label>&nbsp;</label>
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                        <a th:href="@{/bills}" class="btn btn-outline">Clear</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <section class="card table-card">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>Bill ID</th>
+                    <th>Booking</th>
+                    <th>Customer</th>
+                    <th>Room</th>
+                    <th>Room Charges</th>
+                    <th>Food Charges</th>
+                    <th>GST (18%)</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Bill Date</th>
+                    <th class="actions-col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(bills)}">
+                    <td colspan="11" class="empty-row">No bills found.</td>
+                </tr>
+                <tr th:each="bill : ${bills}">
+                    <td th:text="'#' + ${bill.id}">#1</td>
+                    <td th:text="'#' + ${bill.bookingId}">#1</td>
+                    <td th:text="${bill.customerName}">John Doe</td>
+                    <td th:text="${bill.roomNumber}">101</td>
+                    <td th:text="'₹' + ${#numbers.formatDecimal(bill.roomCharges, 1, 2)}">0.00</td>
+                    <td th:text="'₹' + ${#numbers.formatDecimal(bill.foodCharges, 1, 2)}">0.00</td>
+                    <td th:text="'₹' + ${#numbers.formatDecimal(bill.taxAmount, 1, 2)}">0.00</td>
+                    <td th:text="'₹' + ${#numbers.formatDecimal(bill.totalAmount, 1, 2)}">0.00</td>
+                    <td>
+                        <span class="badge"
+                              th:classappend="${' badge-payment-' + #strings.toLowerCase(bill.paymentStatus.name())}"
+                              th:text="${bill.paymentStatus.name()}">PENDING</span>
+                    </td>
+                    <td th:text="${bill.billDate != null ? #temporals.format(bill.billDate, 'dd MMM yyyy') : '—'}">01 Jun 2026</td>
+                    <td class="actions-col">
+                        <a th:href="@{/bills/{id}(id=${bill.id})}" class="btn btn-sm btn-outline">View</a>
+                        <a th:href="@{/bills/{id}/pdf(id=${bill.id})}" class="btn btn-sm btn-secondary">PDF</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

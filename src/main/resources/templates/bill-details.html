@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Bill Details</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        @media print {
+            .header, .footer, .no-print, .bill-actions {
+                display: none !important;
+            }
+            .main {
+                padding: 0;
+            }
+            .bill-receipt {
+                box-shadow: none;
+                border: none;
+            }
+            body {
+                background: #fff;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="header no-print" th:replace="~{fragments/layout :: header}"></div>
+
+<main class="main container">
+    <div class="page-header no-print">
+        <div>
+            <h2>Bill Details</h2>
+            <p class="page-subtitle">Bill <span th:text="'#' + ${bill.id}">#1</span></p>
+        </div>
+        <div class="bill-actions btn-group">
+            <a th:href="@{/bills}" class="btn btn-outline">Back to Bills</a>
+            <a th:href="@{/bills/{id}/pdf(id=${bill.id})}" class="btn btn-secondary">Download PDF</a>
+            <button type="button" class="btn btn-primary" onclick="window.print()">Print Bill</button>
+        </div>
+    </div>
+
+    <section class="card bill-receipt">
+        <div class="bill-header">
+            <h3>Hotel Management System</h3>
+            <p class="bill-subtitle">Tax Invoice / Bill</p>
+        </div>
+
+        <div class="bill-meta">
+            <div class="bill-meta-row">
+                <span class="bill-label">Bill ID</span>
+                <span th:text="'#' + ${bill.id}">#1</span>
+            </div>
+            <div class="bill-meta-row">
+                <span class="bill-label">Booking ID</span>
+                <span th:text="'#' + ${bill.bookingId}">#1</span>
+            </div>
+            <div class="bill-meta-row">
+                <span class="bill-label">Customer</span>
+                <span th:text="${bill.customerName}">John Doe</span>
+            </div>
+            <div class="bill-meta-row">
+                <span class="bill-label">Room</span>
+                <span th:text="${bill.roomNumber}">101</span>
+            </div>
+            <div class="bill-meta-row">
+                <span class="bill-label">Stay Period</span>
+                <span th:text="${#temporals.format(bill.checkInDate, 'dd MMM yyyy')} + ' — ' + ${#temporals.format(bill.checkOutDate, 'dd MMM yyyy')} + ' (' + ${bill.nights} + ' night(s))'">
+                    01 Jun 2026 — 05 Jun 2026 (4 nights)
+                </span>
+            </div>
+            <div class="bill-meta-row" th:if="${bill.billDate != null}">
+                <span class="bill-label">Bill Date</span>
+                <span th:text="${#temporals.format(bill.billDate, 'dd MMM yyyy HH:mm')}">01 Jun 2026 10:00</span>
+            </div>
+            <div class="bill-meta-row">
+                <span class="bill-label">Payment Status</span>
+                <span class="badge"
+                      th:classappend="${' badge-payment-' + #strings.toLowerCase(bill.paymentStatus.name())}"
+                      th:text="${bill.paymentStatus.name()}">PENDING</span>
+            </div>
+            <div class="bill-meta-row" th:if="${bill.paymentMethod != null}">
+                <span class="bill-label">Payment Method</span>
+                <span th:text="${bill.paymentMethod.name()}">CARD</span>
+            </div>
+            <div class="bill-meta-row" th:if="${bill.paidAt != null}">
+                <span class="bill-label">Paid At</span>
+                <span th:text="${#temporals.format(bill.paidAt, 'dd MMM yyyy HH:mm')}">01 Jun 2026 11:00</span>
+            </div>
+        </div>
+
+        <table class="bill-table">
+            <thead>
+            <tr>
+                <th>Description</th>
+                <th class="text-right">Amount (₹)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="'Room Charges (' + ${bill.nights} + ' night(s) × ₹' + ${#numbers.formatDecimal(bill.pricePerNight, 1, 2)} + ')'">
+                    Room Charges
+                </td>
+                <td class="text-right" th:text="${#numbers.formatDecimal(bill.roomCharges, 1, 2)}">0.00</td>
+            </tr>
+            <tr>
+                <td>Food Charges</td>
+                <td class="text-right" th:text="${#numbers.formatDecimal(bill.foodCharges, 1, 2)}">0.00</td>
+            </tr>
+            <tr>
+                <td>GST (18%)</td>
+                <td class="text-right" th:text="${#numbers.formatDecimal(bill.taxAmount, 1, 2)}">0.00</td>
+            </tr>
+            <tr class="bill-total-row">
+                <td><strong>Total Amount</strong></td>
+                <td class="text-right"><strong th:text="'₹' + ${#numbers.formatDecimal(bill.totalAmount, 1, 2)}">₹0.00</strong></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="bill-notes" th:if="${bill.notes != null and !bill.notes.isBlank()}">
+            <span class="bill-label">Notes</span>
+            <p th:text="${bill.notes}">Checkout bill</p>
+        </div>
+    </section>
+</main>
+
+<div class="footer no-print" th:replace="~{fragments/layout :: footer}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
