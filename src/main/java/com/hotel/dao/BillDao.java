@@ -1,16 +1,5 @@
 package com.hotel.dao;
 
-import com.hotel.model.Bill;
-import com.hotel.model.BillView;
-import com.hotel.model.enums.PaymentMethod;
-import com.hotel.model.enums.PaymentStatus;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Repository;
-
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -18,6 +7,18 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
+
+import com.hotel.model.Bill;
+import com.hotel.model.BillView;
+import com.hotel.model.enums.PaymentMethod;
+import com.hotel.model.enums.PaymentStatus;
 
 @Repository
 public class BillDao {
@@ -218,4 +219,38 @@ public class BillDao {
         Number key = keyHolder.getKey();
         return key != null ? key.longValue() : null;
     }
+    public int receivePayment(Long billId, PaymentMethod paymentMethod) {
+
+    String sql = """
+            UPDATE bills
+            SET payment_status = 'PAID',
+                payment_method = ?,
+                paid_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+              AND payment_status = 'PENDING'
+            """;
+
+    return jdbcTemplate.update(
+            sql,
+            paymentMethod.name(),
+            billId
+    );
+}
+public java.math.BigDecimal getRevenueToday() {
+
+    java.math.BigDecimal revenue =
+            jdbcTemplate.queryForObject(
+                    """
+                    SELECT COALESCE(SUM(total_amount), 0)
+                    FROM bills
+                    WHERE payment_status = 'PAID'
+                      AND DATE(paid_at) = CURDATE()
+                    """,
+                    java.math.BigDecimal.class
+            );
+
+    return revenue == null
+            ? java.math.BigDecimal.ZERO
+            : revenue;
+}
 }

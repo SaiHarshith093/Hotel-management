@@ -1,8 +1,12 @@
 package com.hotel.dao;
 
-import com.hotel.model.Room;
-import com.hotel.model.enums.RoomStatus;
-import com.hotel.model.enums.RoomType;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -10,12 +14,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.hotel.model.Room;
+import com.hotel.model.enums.RoomStatus;
+import com.hotel.model.enums.RoomType;
 
 @Repository
 public class RoomDao {
@@ -155,4 +156,22 @@ public class RoomDao {
     public int updateStatus(Long id, RoomStatus status) {
         return jdbcTemplate.update("UPDATE rooms SET status = ? WHERE id = ?", status.name(), id);
     }
+    public long countRooms() {
+    Long count = jdbcTemplate.queryForObject(
+            "SELECT COUNT(*) FROM rooms",
+            Long.class
+    );
+
+    return count == null ? 0 : count;
+}
+
+public long countByStatus(RoomStatus status) {
+    Long count = jdbcTemplate.queryForObject(
+            "SELECT COUNT(*) FROM rooms WHERE status = ?",
+            Long.class,
+            status.name()
+    );
+
+    return count == null ? 0 : count;
+}
 }

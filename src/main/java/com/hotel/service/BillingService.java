@@ -1,5 +1,15 @@
 package com.hotel.service;
 
+import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.hotel.dao.BillDao;
 import com.hotel.dao.BookingDao;
 import com.hotel.dao.FoodDao;
@@ -13,7 +23,9 @@ import com.hotel.model.Booking;
 import com.hotel.model.BookingView;
 import com.hotel.model.Room;
 import com.hotel.model.enums.BookingStatus;
+import com.hotel.model.enums.PaymentMethod;
 import com.hotel.model.enums.PaymentStatus;
+import com.hotel.model.enums.RoomStatus;
 import com.hotel.util.AppConstants;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
@@ -25,15 +37,6 @@ import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.io.ByteArrayOutputStream;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 @Service
 public class BillingService {
@@ -207,4 +210,39 @@ public class BillingService {
     private String formatCurrency(BigDecimal amount) {
         return "Rs. " + amount.setScale(2, RoundingMode.HALF_UP);
     }
+    @Transactional
+public void receivePayment(Long billId,
+                           PaymentMethod paymentMethod) {
+
+    Bill bill = billDao.findById(billId)
+            .orElseThrow(() ->
+                    new HotelException("Bill not found."));
+
+    if (bill.getPaymentStatus() != PaymentStatus.PENDING) {
+        throw new HotelException(
+                "Payment has already been processed.");
+    }
+
+    int updated = billDao.receivePayment(
+            billId,
+            paymentMethod);
+
+    if (updated != 1) {
+        throw new HotelException(
+                "Failed to update payment.");
+    }
+
+Booking booking = bookingDao.findById(
+        bill.getBookingId())
+        .orElseThrow(() ->
+                new HotelException("Booking not found."));
+
+bookingDao.updateStatus(
+        booking.getId(),
+        BookingStatus.COMPLETED);
+
+roomDao.updateStatus(
+        booking.getRoomId(),
+        RoomStatus.AVAILABLE);
+}
 }

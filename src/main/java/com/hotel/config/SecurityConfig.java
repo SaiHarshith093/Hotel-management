@@ -30,7 +30,9 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
                         .requestMatchers("/admin/**", "/users/**").hasRole("ADMIN")
-                        .anyRequest().hasAnyRole("ADMIN", "RECEPTIONIST")
+                        .requestMatchers("/reports/**")
+.hasAnyRole("ADMIN", "MANAGER")
+                        .anyRequest().hasAnyRole("ADMIN", "RECEPTIONIST", "MANAGER")
                 )
                 .formLogin(form -> form
                         .loginPage("/login")

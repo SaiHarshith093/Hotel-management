@@ -1,7 +1,12 @@
 package com.hotel.dao;
 
-import com.hotel.model.Customer;
-import com.hotel.model.enums.Gender;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -9,12 +14,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.hotel.model.Customer;
+import com.hotel.model.enums.Gender;
 
 @Repository
 public class CustomerDao {
@@ -125,4 +126,13 @@ public class CustomerDao {
     public int deleteById(Long id) {
         return jdbcTemplate.update("DELETE FROM customers WHERE id = ?", id);
     }
+    public long countCustomers() {
+
+    Long count = jdbcTemplate.queryForObject(
+            "SELECT COUNT(*) FROM customers",
+            Long.class
+    );
+
+    return count == null ? 0 : count;
+}
 }

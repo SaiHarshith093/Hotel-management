@@ -1,15 +1,5 @@
 package com.hotel.dao;
 
-import com.hotel.model.Booking;
-import com.hotel.model.BookingView;
-import com.hotel.model.enums.BookingStatus;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Repository;
-
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -18,6 +8,17 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
+
+import com.hotel.model.Booking;
+import com.hotel.model.BookingView;
+import com.hotel.model.enums.BookingStatus;
 
 @Repository
 public class BookingDao {
@@ -138,17 +139,16 @@ public class BookingDao {
         );
     }
 
-    public List<BookingView> findEligibleForCheckout() {
-        return jdbcTemplate.query(
-                VIEW_SELECT + """
-                 WHERE b.status = ?
-                   AND NOT EXISTS (SELECT 1 FROM bills bl WHERE bl.booking_id = b.id)
-                 ORDER BY b.check_in_date DESC
-                """,
-                BOOKING_VIEW_ROW_MAPPER,
-                BookingStatus.CHECKED_IN.name()
-        );
-    }
+public List<BookingView> findEligibleForCheckout() {
+    return jdbcTemplate.query(
+            VIEW_SELECT + """
+             WHERE b.status = ?
+             ORDER BY b.check_in_date DESC
+            """,
+            BOOKING_VIEW_ROW_MAPPER,
+            BookingStatus.CHECKED_IN.name()
+    );
+}
 
     public Optional<Booking> findById(Long id) {
         try {
@@ -266,4 +266,18 @@ public class BookingDao {
                 id
         );
     }
+        public long countActiveBookings() {
+
+    Long count = jdbcTemplate.queryForObject(
+            """
+            SELECT COUNT(*)
+            FROM bookings
+            WHERE status IN ('CONFIRMED', 'CHECKED_IN')
+            """,
+            Long.class
+    );
+    
+    return count == null ? 0 : count;
 }
+    }
+

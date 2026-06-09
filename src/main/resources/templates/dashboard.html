@@ -31,6 +31,14 @@
                 <span class="kpi-label">Occupied Rooms</span>
                 <span class="kpi-value" th:text="${stats.occupiedRooms}">0</span>
             </article>
+            <article class="kpi-card">
+    <span class="kpi-icon" aria-hidden="true">&#128100;</span>
+    <span class="kpi-label">Customers</span>
+    <span class="kpi-value"
+          th:text="${stats.totalCustomers}">
+        0
+    </span>
+</article>
             <article class="kpi-card kpi-bookings">
                 <span class="kpi-icon" aria-hidden="true">&#128197;</span>
                 <span class="kpi-label">Active Bookings</span>

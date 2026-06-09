@@ -1,15 +1,7 @@
 package com.hotel.controller;
 
-import com.hotel.exception.HotelException;
-import com.hotel.model.Booking;
-import com.hotel.model.Room;
-import com.hotel.model.enums.BookingStatus;
-import com.hotel.model.enums.RoomStatus;
-import com.hotel.security.HotelUserDetails;
-import com.hotel.service.BookingService;
-import com.hotel.service.CustomerService;
-import com.hotel.service.RoomService;
-import jakarta.validation.Valid;
+import java.util.List;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +14,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import com.hotel.exception.HotelException;
+import com.hotel.model.Booking;
+import com.hotel.model.Room;
+import com.hotel.model.enums.BookingStatus;
+import com.hotel.model.enums.RoomStatus;
+import com.hotel.security.HotelUserDetails;
+import com.hotel.service.BookingService;
+import com.hotel.service.CustomerService;
+import com.hotel.service.RoomService;
+
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/bookings")
@@ -87,6 +89,50 @@ public class BookingController {
             return "add-booking";
         }
     }
+
+    @PostMapping("/check-in/{id}")
+public String checkIn(@PathVariable Long id,
+                      RedirectAttributes redirectAttributes) {
+
+    try {
+
+        bookingService.checkIn(id);
+
+        redirectAttributes.addFlashAttribute(
+                "successMessage",
+                "Guest checked in successfully.");
+
+    } catch (HotelException ex) {
+
+        redirectAttributes.addFlashAttribute(
+                "errorMessage",
+                ex.getMessage());
+    }
+
+    return "redirect:/bookings";
+}
+
+@PostMapping("/check-out/{id}")
+public String checkOut(@PathVariable Long id,
+                       RedirectAttributes redirectAttributes) {
+
+    try {
+
+        bookingService.checkOut(id);
+
+        redirectAttributes.addFlashAttribute(
+                "successMessage",
+                "Guest checked out successfully.");
+
+    } catch (HotelException ex) {
+
+        redirectAttributes.addFlashAttribute(
+                "errorMessage",
+                ex.getMessage());
+    }
+
+    return "redirect:/bookings";
+}
 
     @PostMapping("/cancel/{id}")
     public String cancelBooking(@PathVariable Long id, RedirectAttributes redirectAttributes) {

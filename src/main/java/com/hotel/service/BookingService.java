@@ -1,5 +1,11 @@
 package com.hotel.service;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.hotel.dao.BookingDao;
 import com.hotel.dao.CustomerDao;
 import com.hotel.dao.RoomDao;
@@ -12,11 +18,6 @@ import com.hotel.model.BookingView;
 import com.hotel.model.Room;
 import com.hotel.model.enums.BookingStatus;
 import com.hotel.model.enums.RoomStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Service
 public class BookingService {
@@ -62,9 +63,44 @@ public class BookingService {
         Long id = bookingDao.save(booking);
         booking.setId(id);
 
-        roomDao.updateStatus(booking.getRoomId(), RoomStatus.OCCUPIED);
+        roomDao.updateStatus(booking.getRoomId(), RoomStatus.RESERVED);
 
         return booking;
+    }
+
+    @Transactional
+public void checkIn(Long bookingId) {
+
+    Booking booking = getBookingById(bookingId);
+
+    if (booking.getStatus() != BookingStatus.CONFIRMED) {
+        throw new HotelException(
+                "Only confirmed bookings can be checked in.");
+    }
+
+    bookingDao.updateStatus(
+            bookingId,
+            BookingStatus.CHECKED_IN);
+
+    roomDao.updateStatus(
+            booking.getRoomId(),
+            RoomStatus.OCCUPIED);
+}
+
+@Transactional
+public void checkOut(Long bookingId) {
+
+    Booking booking = getBookingById(bookingId);
+
+    if (booking.getStatus() != BookingStatus.CHECKED_IN) {
+        throw new HotelException(
+                "Only checked-in bookings can be checked out.");
+    }
+
+    bookingDao.updateStatus(
+            bookingId,
+            BookingStatus.CHECKED_OUT);
+
     }
 
     @Transactional
@@ -74,10 +110,13 @@ public class BookingService {
         if (booking.getStatus() == BookingStatus.CANCELLED) {
             throw new HotelException("Booking is already cancelled.");
         }
-        if (booking.getStatus() == BookingStatus.CHECKED_OUT
-                || booking.getStatus() == BookingStatus.COMPLETED) {
-            throw new HotelException("Cannot cancel a completed booking.");
-        }
+       if (booking.getStatus() == BookingStatus.CHECKED_IN
+        || booking.getStatus() == BookingStatus.CHECKED_OUT
+        || booking.getStatus() == BookingStatus.COMPLETED) {
+
+    throw new HotelException(
+            "Checked-in or completed bookings cannot be cancelled.");
+}
 
         bookingDao.updateStatus(id, BookingStatus.CANCELLED);
 

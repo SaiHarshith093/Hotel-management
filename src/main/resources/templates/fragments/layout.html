@@ -22,40 +22,53 @@
         </a>
         <button type="button" class="sidebar-close" id="sidebarClose" aria-label="Close menu">&times;</button>
     </div>
-    <nav class="sidebar-nav" aria-label="Main navigation">
-        <a th:href="@{/dashboard}" class="sidebar-link" data-nav="/dashboard">
-            <span class="sidebar-link-icon" aria-hidden="true">&#9632;</span>
-            <span>Dashboard</span>
-        </a>
+  <nav class="sidebar-nav" aria-label="Main navigation">
+
+    <a th:href="@{/dashboard}" class="sidebar-link" data-nav="/dashboard">
+        <span class="sidebar-link-icon" aria-hidden="true">&#9632;</span>
+        <span>Dashboard</span>
+    </a>
+
+    <div sec:authorize="hasAnyRole('ADMIN','MANAGER')">
         <a th:href="@{/rooms}" class="sidebar-link" data-nav="/rooms">
             <span class="sidebar-link-icon" aria-hidden="true">&#9632;</span>
             <span>Rooms</span>
         </a>
-        <a th:href="@{/customers}" class="sidebar-link" data-nav="/customers">
-            <span class="sidebar-link-icon" aria-hidden="true">&#9632;</span>
-            <span>Customers</span>
-        </a>
-        <a th:href="@{/bookings}" class="sidebar-link" data-nav="/bookings">
-            <span class="sidebar-link-icon" aria-hidden="true">&#9632;</span>
-            <span>Bookings</span>
-        </a>
-        <a th:href="@{/food-orders}" class="sidebar-link" data-nav="/food-orders">
-            <span class="sidebar-link-icon" aria-hidden="true">&#9632;</span>
-            <span>Food Orders</span>
-        </a>
-        <a th:href="@{/bills}" class="sidebar-link" data-nav="/bills">
-            <span class="sidebar-link-icon" aria-hidden="true">&#9632;</span>
-            <span>Billing</span>
-        </a>
-        <a th:href="@{/checkout}" class="sidebar-link" data-nav="/checkout">
-            <span class="sidebar-link-icon" aria-hidden="true">&#9632;</span>
-            <span>Checkout</span>
-        </a>
+    </div>
+
+    <a th:href="@{/customers}" class="sidebar-link" data-nav="/customers">
+        <span class="sidebar-link-icon" aria-hidden="true">&#9632;</span>
+        <span>Customers</span>
+    </a>
+
+    <a th:href="@{/bookings}" class="sidebar-link" data-nav="/bookings">
+        <span class="sidebar-link-icon" aria-hidden="true">&#9632;</span>
+        <span>Bookings</span>
+    </a>
+
+    <a th:href="@{/food-orders}" class="sidebar-link" data-nav="/food-orders">
+        <span class="sidebar-link-icon" aria-hidden="true">&#9632;</span>
+        <span>Food Orders</span>
+    </a>
+
+    <a th:href="@{/bills}" class="sidebar-link" data-nav="/bills">
+        <span class="sidebar-link-icon" aria-hidden="true">&#9632;</span>
+        <span>Billing</span>
+    </a>
+
+    <a th:href="@{/checkout}" class="sidebar-link" data-nav="/checkout">
+        <span class="sidebar-link-icon" aria-hidden="true">&#9632;</span>
+        <span>Checkout</span>
+    </a>
+
+    <div sec:authorize="hasAnyRole('ADMIN','MANAGER')">
         <a th:href="@{/reports}" class="sidebar-link" data-nav="/reports">
             <span class="sidebar-link-icon" aria-hidden="true">&#9632;</span>
             <span>Reports</span>
         </a>
-    </nav>
+    </div>
+
+</nav>
     <div class="sidebar-footer">
         <form th:action="@{/logout}" method="post" class="sidebar-logout-form">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>

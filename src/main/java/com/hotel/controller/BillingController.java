@@ -1,8 +1,5 @@
 package com.hotel.controller;
 
-import com.hotel.exception.HotelException;
-import com.hotel.model.enums.PaymentStatus;
-import com.hotel.service.BillingService;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -15,6 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.hotel.exception.HotelException;
+import com.hotel.model.enums.PaymentMethod;
+import com.hotel.model.enums.PaymentStatus;
+import com.hotel.service.BillingService;
 
 @Controller
 @RequestMapping("/bills")
@@ -62,6 +64,32 @@ public class BillingController {
             return "redirect:/bills";
         }
     }
+
+    @PostMapping("/{id}/pay")
+public String receivePayment(
+        @PathVariable Long id,
+        @RequestParam PaymentMethod paymentMethod,
+        RedirectAttributes redirectAttributes) {
+
+    try {
+
+        billingService.receivePayment(
+                id,
+                paymentMethod);
+
+        redirectAttributes.addFlashAttribute(
+                "successMessage",
+                "Payment received successfully.");
+
+    } catch (HotelException ex) {
+
+        redirectAttributes.addFlashAttribute(
+                "errorMessage",
+                ex.getMessage());
+    }
+
+    return "redirect:/bills/" + id;
+}
 
     @GetMapping("/{id}/pdf")
     public ResponseEntity<byte[]> downloadBillPdf(@PathVariable Long id) {

@@ -1,5 +1,11 @@
 package com.hotel.service;
 
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.hotel.dao.BillDao;
 import com.hotel.dao.BookingDao;
 import com.hotel.dao.RoomDao;
@@ -14,11 +20,6 @@ import com.hotel.model.CheckoutResult;
 import com.hotel.model.Room;
 import com.hotel.model.enums.BookingStatus;
 import com.hotel.model.enums.RoomStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 @Service
 public class CheckoutService {
