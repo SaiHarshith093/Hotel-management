@@ -1,222 +1,39 @@
-# 🏨 Hotel Management System
-
-A full-stack Hotel Management System developed using **Java, Spring Boot, Spring Security, JDBC, MySQL, Thymeleaf, and Maven**. The application helps hotel staff manage rooms, customers, bookings, food orders, billing, and revenue tracking through a secure role-based dashboard.
-
----
-
-## 🚀 Features
-
-### 🔐 Authentication & Authorization
-- Secure login using Spring Security
-- BCrypt password encryption
-- Role-based access control
-    - ADMIN
-    - MANAGER
-    - RECEPTIONIST
-
-### 🏠 Room Management
-- Add rooms
-- Edit room details
-- Delete rooms
-- Room status tracking
-    - Available
-    - Reserved
-    - Occupied
-    - Maintenance
-
-### 👥 Customer Management
-- Add customers
-- Update customer details
-- Search customers
-- Customer history tracking
-
-### 📅 Booking Management
-- Create bookings
-- Cancel bookings
-- Booking status tracking
-    - Confirmed
-    - Checked In
-    - Checked Out
-    - Completed
-    - Cancelled
-
-### 🚪 Check-In / Check-Out
-- Room occupancy management
-- Automatic room status updates
-- Booking lifecycle management
-
-### 🍽 Food Order Management
-- Create food orders
-- Link food orders to bookings
-- Food bill calculation
-
-### 💳 Billing System
-- Generate bills
-- GST calculation
-- Payment tracking
-- Payment methods:
-    - Cash
-    - Card
-    - UPI
-    - Online
-
-### 📄 PDF Invoice Generation
-- Download bill as PDF
-- Printable invoice format
-
-### 📊 Dashboard Analytics
-- Total Rooms
-- Available Rooms
-- Occupied Rooms
-- Total Customers
-- Active Bookings
-- Daily Revenue
-
-### 📈 Charts & Reports
-- Room Status Chart
-- Booking Status Chart
-- Revenue Trends
-
----
-
-## 🛠 Tech Stack
-
-### Backend
-- Java 17
-- Spring Boot
-- Spring Security
-- Spring JDBC
-
-### Frontend
-- Thymeleaf
-- HTML5
-- CSS3
-- JavaScript
-- Chart.js
-
-### Database
-- MySQL
-
-### Build Tool
-- Maven
-
-### PDF Generation
-- OpenPDF (iText Compatible)
-
-### Version Control
-- Git
-- GitHub
-
----
-
-## 📂 Project Structure
-
-```text
-src/main/java/com/hotel
-│
-├── config
-├── controller
-├── dao
-├── service
-├── model
-├── security
-├── exception
-├── util
-└── HotelManagementApplication
-```
-
----
-
-## ⚙️ Database Setup
-
-Create a MySQL database:
-
-```sql
-CREATE DATABASE hotel_management;
-```
-
-Update `application.properties`:
-
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/hotel_management
-spring.datasource.username=root
-spring.datasource.password=your_password
-
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-```
-
----
-
-## ▶️ Running the Project
-
-### Clone Repository
-
-```bash
-git clone https://github.com/SaiHarshith093/Hotel-management.git
-cd Hotel-management
-```
-
-### Build Project
-
-```bash
-mvn clean install
-```
-
-### Run Application
-
-```bash
-mvn spring-boot:run
-```
-
-Application will start at:
-
-```text
-http://localhost:8080
-```
-
----
-
-## 🔑 Default Roles
-
-| Role | Access |
-|--------|--------|
-| ADMIN | Full access |
-| MANAGER | Reports, Dashboard, Operations |
-| RECEPTIONIST | Customer, Booking, Billing Operations |
-
----
-
-## 📷 Screenshots
-
-### Login Page
-![Login Page](screenshots/login.png)
- 
-### Dashboard
-![Dashboard](screenshots/dashboard.png)
-
-### Food Order
-![Food order](screenshots/food-orders.png)
- 
-### Room Management
-![Rooms](screenshots/room-management.png)
-
-### Customer Management
-![Customers](screenshots/customer-management.png)
- 
-### Booking Management
-![Bookings](screenshots/booking-management.png)
- 
-### Billing
-![Billing](screenshots/billing.png)
-
-### Invoice
-![Invoice](screenshots/bill-details.png)
- 
----
-
-## 🔄 Booking Workflow
-
-```text
+🏨 Hotel Management System
+A full-stack Hotel Management System built using Java 17, Spring Boot, Spring Security, JDBC, MySQL, Thymeleaf, Maven, and Chart.js.
+The system enables hotel staff to manage rooms, customers, bookings, food orders, billing, payments, and operational reports through a secure role-based dashboard.
+________________________________________
+✨ Key Features
+🔐 Authentication & Security
+•	Spring Security based authentication
+•	BCrypt password encryption
+•	Session management
+•	CSRF protection
+•	Role-based access control (RBAC)
+👥 User Roles
+Role	Permissions
+ADMIN	Full system access
+MANAGER	Dashboard, Reports, Operations
+RECEPTIONIST	Customer, Booking, Billing operations
+________________________________________
+🏨 Room Management
+•	Add new rooms
+•	Update room information
+•	Delete rooms
+•	Room availability tracking
+Room Statuses
+•	AVAILABLE
+•	RESERVED
+•	OCCUPIED
+•	MAINTENANCE
+________________________________________
+👤 Customer Management
+•	Register customers
+•	Update customer details
+•	Search customers
+•	Customer stay history
+________________________________________
+📅 Booking Management
+Booking Workflow
 Booking Created
        ↓
    CONFIRMED
@@ -230,58 +47,209 @@ Booking Created
  Payment Received
        ↓
    COMPLETED
-```
+Features
+•	Create booking
+•	Cancel booking
+•	Check-In
+•	Check-Out
+•	Automatic room status updates
+•	Booking validation
+________________________________________
+🍽 Food Order Management
+•	Place food orders
+•	Associate orders with bookings
+•	Automatic billing integration
+•	Order tracking
+________________________________________
+💳 Billing & Payments
+Billing Features
+•	Automatic bill generation
+•	GST calculation
+•	Room charge calculation
+•	Food charge integration
+•	Payment tracking
+Payment Methods
+•	CASH
+•	CARD
+•	UPI
+•	ONLINE
+Invoice Features
+•	PDF invoice generation
+•	Printable bills
+•	Payment status tracking
+________________________________________
+📊 Dashboard Analytics
+The dashboard provides real-time statistics:
+•	Total Rooms
+•	Available Rooms
+•	Occupied Rooms
+•	Total Customers
+•	Active Bookings
+•	Revenue Today
+Charts
+•	Room Status Distribution
+•	Booking Status Distribution
+•	Revenue Trend (Last 7 Days)
+________________________________________
+🏗 System Architecture
+┌──────────────────────┐
+│      Browser         │
+│   Thymeleaf Views    │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│     Controllers      │
+│     Spring MVC       │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│      Services        │
+│   Business Logic     │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│        DAO           │
+│    Spring JDBC       │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│       MySQL          │
+│      Database        │
+└──────────────────────┘
+________________________________________
+🗄 Database Design
+Tables
+•	users
+•	rooms
+•	customers
+•	bookings
+•	food_orders
+•	bills
+Relationships
+Customer (1) ────── (M) Booking
 
----
+Room (1) ────────── (M) Booking
 
-## 📊 Dashboard Metrics
+Booking (1) ─────── (M) Food Orders
 
-The dashboard displays:
-
-- Total Rooms
-- Available Rooms
-- Occupied Rooms
-- Total Customers
-- Active Bookings
-- Revenue Today
-- Room Status Distribution
-- Booking Status Distribution
-- Revenue Trends
-
----
-
-## 🔒 Security Features
-
-- Spring Security Authentication
-- Session Management
-- Role-Based Authorization
-- Password Encryption using BCrypt
-- CSRF Protection
-
----
-
-## 🎯 Future Enhancements
-
-- Docker Deployment
-- Email Notifications
-- Online Payment Gateway
-- REST API Integration
-- Room Service Module
-- Inventory Management
-- Customer Feedback System
-- Cloud Deployment (AWS/Render/Railway)
-
----
-
-## 👨‍💻 Author
-
-**Sai Harshith**
-
+Booking (1) ─────── (1) Bill
+________________________________________
+🛠 Technology Stack
+Backend
+•	Java 17
+•	Spring Boot
+•	Spring Security
+•	Spring JDBC
+Frontend
+•	Thymeleaf
+•	HTML5
+•	CSS3
+•	JavaScript
+•	Chart.js
+Database
+•	MySQL
+Build Tool
+•	Maven
+PDF Generation
+•	OpenPDF
+Version Control
+•	Git
+•	GitHub
+________________________________________
+📂 Project Structure
+src/main/java/com/hotel
+│
+├── config
+├── controller
+├── dao
+├── service
+├── model
+├── security
+├── exception
+├── util
+└── HotelManagementApplication
+________________________________________
+⚙️ Database Setup
+Create Database
+CREATE DATABASE hotel_management;
+Configure application.properties
+spring.datasource.url=jdbc:mysql://localhost:3306/hotel_management
+spring.datasource.username=root
+spring.datasource.password=your_password
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+________________________________________
+▶️ Running the Application
+Clone Repository
+git clone https://github.com/SaiHarshith093/Hotel-management.git
+cd Hotel-management
+Build
+mvn clean install
+Run
+mvn spring-boot:run
+Application URL:
+http://localhost:8080
+________________________________________
+📷 Application Screenshots
+Login Page
+![Login Page](screenshots/login.png)
+ 
+Dashboard
+![Dashboard](screenshots/dashboard.png)
+ 
+Room Management
+![Rooms](screenshots/room-management.png)
+ 
+Customer Management
+![Customers](screenshots/customer-management.png)
+ 
+Booking Management
+![Bookings](screenshots/booking-management.png)
+ 
+Food Orders
+![Food order](screenshots/food-orders.png)
+ 
+Billing
+ ![Billing](screenshots/billing.png)
+ 
+Invoice
+![Invoice](screenshots/bill-details.png)
+ 
+________________________________________
+🔒 Security Features
+•	Spring Security Authentication
+•	BCrypt Password Encryption
+•	Session Management
+•	CSRF Protection
+•	Role-Based Authorization
+________________________________________
+🚀 Future Enhancements
+•	Docker Containerization
+•	Email Notifications
+•	Online Payment Gateway Integration
+•	REST API Support
+•	Inventory Management
+•	Customer Feedback Module
+•	Cloud Deployment (AWS / Azure / Railway)
+•	Mobile Application Support
+________________________________________
+🎯 Resume Highlights
+•	Developed a full-stack Hotel Management System using Java and Spring Boot.
+•	Implemented Role-Based Access Control (RBAC) using Spring Security.
+•	Built complete booking lifecycle management (Check-In/Check-Out).
+•	Integrated billing, payment processing, and PDF invoice generation.
+•	Designed dashboard analytics using Chart.js.
+•	Implemented MySQL persistence using Spring JDBC.
+•	Followed layered architecture (Controller → Service → DAO → Database).
+________________________________________
+👨‍💻 Author
+Sai Harshith
 GitHub:
 https://github.com/SaiHarshith093
-
----
-
-## 📄 License
-
+________________________________________
+📄 License
 This project is developed for educational and portfolio purposes.
+
